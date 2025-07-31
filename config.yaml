@@ -1,0 +1,30 @@
+env:
+  params:
+    width: 9
+    height: 9
+    num_mines: 10
+    action_type: discrete
+
+model:
+  kernel_sizes: [3, 3, 3]
+  strides: [1, 1, 1]
+  paddings: [1, 1, 1]
+  out_channels: [64, 64, 64]
+  conv_activations: [ReLU, ReLU, ReLU]
+  poolings: [MaxPool2d, MaxPool2d, AdaptiveAvgPool2d]
+  hidden_sizes: [256, 256]
+  hidden_activations: [ReLU, ReLU]
+  output_activation: null
+
+train:
+  base_dir: "runs"
+  num_episodes: 100000
+  gamma: 0.99
+  epsilon_max: 1.0
+  epsilon_min: 0.001
+  epsilon_decay: 0.999
+  learning_rate: 0.0001
+  memory_size: 100000
+  batch_size: 32
+  target_network: True
+  target_update_freq: 25
