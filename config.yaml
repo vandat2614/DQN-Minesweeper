@@ -12,7 +12,7 @@ model:
   out_channels: [128, 128, 128]
   conv_activations: [ReLU, ReLU, ReLU]
   poolings: [MaxPool2d, MaxPool2d, AdaptiveAvgPool2d]
-  hidden_sizes: [256, 256]
+  hidden_sizes: [512, 512]
   hidden_activations: [ReLU, ReLU]
   output_activation: null
 
@@ -23,7 +23,7 @@ train:
   epsilon_max: 1.0
   epsilon_min: 0.001
   epsilon_decay: 0.999
-  learning_rate: 0.001
+  learning_rate: 0.000125
   memory_size: 100000
   batch_size: 32
   target_network: True
