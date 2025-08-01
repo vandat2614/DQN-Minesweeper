@@ -87,8 +87,8 @@ def train(env, model, config, device):
                 with torch.no_grad():
                     state_tensor = convert_state_to_onehot(state).unsqueeze(0).to(device)
                     q_values = model(state_tensor)
-                    mask = torch.tensor(env.valid_actions, dtype=torch.bool, device=device)  
-                    q_values[0][~mask] = -1e9
+                    # mask = torch.tensor(env.valid_actions, dtype=torch.bool, device=device)  
+                    # q_values[0][~mask] = -1e9
                     action = q_values.argmax(dim=1).item()
 
             next_state, reward, terminated, truncated, info = env.step(action)

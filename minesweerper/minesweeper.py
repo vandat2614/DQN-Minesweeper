@@ -99,7 +99,7 @@ class MinesweeperEnv(gym.Env):
             self.valid_actions = (self.playerfield == CLOSED)
             if self.action_type == 'discrete':
                 self.valid_actions = self.valid_actions.flatten()
-            return self.playerfield, 0, False, False, info
+            return self.playerfield, -0.5, False, False, info
 
         if self.first_step:
             self.hidden_board = place_mines(
