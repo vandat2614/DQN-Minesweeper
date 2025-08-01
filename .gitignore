@@ -5,3 +5,5 @@ tempCodeRunnerFile.py
 __pycache__/
 
 dev.py
+
+*.pt

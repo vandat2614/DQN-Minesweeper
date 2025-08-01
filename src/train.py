@@ -69,7 +69,6 @@ def train(env, model, config, device):
     memory = ExperienceReplay(memory_size)
 
     epsilon = epsilon_max
-    best_score = float('-inf')
     best_reward = float('-inf')
 
     train_log = []
@@ -108,11 +107,12 @@ def train(env, model, config, device):
             
             if terminated or truncated:
                 break
+        is_win = info['is_win']
 
         train_log.append({
             "episode": episode + 1,
             "reward": total_reward,
-            "is_win": info['is_win'],
+            "is_win": is_win,
             "loss": loss,
             "epsilon": epsilon
         })
@@ -120,19 +120,31 @@ def train(env, model, config, device):
         if config['target_network'] and (episode + 1) % target_update_freq == 0:
             target_network.load_state_dict(model.state_dict())
         
-        if  total_reward > best_reward:
+        torch.save(model.state_dict(), f'{weights_dir}/last.pt')
+
+
+        if info["is_win"]:
+            win_path = os.path.join(weights_dir, f"win_ep{episode + 1}.pt")
+            torch.save(model.state_dict(), win_path)
+            
+            date_hour = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            log_message = f"{date_hour}: Win recorded: episode {episode + 1}, reward {total_reward:.2f}"
+            print(log_message)
+            with open(log_path, 'a') as file:
+                file.write(log_message + '\n')
+
+        if total_reward > best_reward:
             best_reward = total_reward
 
             date_hour = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            log_message = f"{date_hour}: New best record: episode {episode + 1}, reward {total_reward:.2f}, status {'win' if info['is_win'] else 'loss'}"
+            log_message = f"{date_hour}: New best reward: episode {episode + 1}, reward {total_reward:.2f}, status {'win' if info['is_win'] else 'loss'}"
             
             print(log_message)
             with open(log_path, 'a') as file:
                 file.write(log_message + '\n')
 
-            torch.save(model.state_dict(), f'{weights_dir}/best.pt')
+            # Lưu model tốt nhất vào best.pt
+            torch.save(model.state_dict(), os.path.join(weights_dir, "best.pt"))
 
     with open(train_log_path, "w") as file:
         json.dump(train_log, file, indent=4)
-
-    torch.save(model.state_dict(), f'{weights_dir}/last.pt')

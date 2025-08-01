@@ -6,10 +6,10 @@ env:
     action_type: discrete
 
 model:
-  kernel_sizes: [3, 3, 3]
-  strides: [1, 1, 1]
-  paddings: [1, 1, 1]
-  out_channels: [64, 64, 64]
+  kernel_sizes: [5, 3, 3]
+  strides: [2, 1, 1]
+  paddings: [2, 1, 1]
+  out_channels: [128, 128, 128]
   conv_activations: [ReLU, ReLU, ReLU]
   poolings: [MaxPool2d, MaxPool2d, AdaptiveAvgPool2d]
   hidden_sizes: [256, 256]
@@ -23,7 +23,7 @@ train:
   epsilon_max: 1.0
   epsilon_min: 0.001
   epsilon_decay: 0.999
-  learning_rate: 0.0001
+  learning_rate: 0.001
   memory_size: 100000
   batch_size: 32
   target_network: True
